@@ -1,0 +1,19 @@
+.image-menu {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 6px; /* smaller gaps for tight layout */
+  padding: 8px;
+  height: 70vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+}
+
+.image-menu::-webkit-scrollbar {
+  display: none;
+}
+
+.row.g-0.top-section {
+  flex: 1 1 auto;
+  min-height: 0;
+}

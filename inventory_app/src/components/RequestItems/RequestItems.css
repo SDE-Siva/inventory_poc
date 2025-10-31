@@ -1,0 +1,50 @@
+.req-container {
+  position: relative;
+}
+
+.action-buttons {
+  position: fixed;
+  right: 8%;
+  top: 75vh;
+}
+.action-buttons button {
+  justify-content: center;
+  align-items: center;
+  width: 85px;
+  height: 45px;
+  background-color: rgb(55 119 180);
+  border: none;
+  margin: 2px;
+  font-size: 18px;
+}
+
+.request-table {
+  max-height: 60vh;
+}
+
+.add-item {
+  position: fixed;
+  margin-top: 270px;
+  top: 45vh;
+  margin-left: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.add-button {
+  height: 40px;
+  background-color: rgb(55 119 180) !important;
+  border: none;
+}
+
+.add-item label,
+input {
+  margin-right: 5px;
+}
+
+.add-item input {
+  border: 1px solid grey;
+  background-color: #fff;
+}

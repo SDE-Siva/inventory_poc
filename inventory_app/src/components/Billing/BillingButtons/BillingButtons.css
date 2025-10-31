@@ -1,0 +1,88 @@
+.billing-buttons {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr); /* 9 equal columns */
+  grid-template-rows: repeat(2, 1fr); /* 2 equal rows */
+  gap: 8px;
+  padding: 10px;
+  width: 100%;
+  height: 30vh; /* fills 30% of screen height */
+  background-color: rgb(165, 241, 165);
+  box-sizing: border-box;
+}
+
+/* Base button style */
+.billing-buttons button {
+  background-color: orange;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  width: 100%;
+  height: 100%;
+}
+
+/* Hover effect */
+.billing-buttons button:hover {
+  transform: scale(1.05);
+}
+
+/* Green variant */
+.green {
+  background-color: rgb(25, 226, 25) !important;
+}
+
+.arrow-icon{
+  background-color: orange;
+}
+
+/* Arrow icon */
+.arrow-icon img {
+  width: 18px;
+  height: 18px;
+  margin-right: 4px;
+  background-color: orange;
+}
+
+/* Remove link underline */
+.links {
+  text-decoration: none;
+  width: 100%;
+  height: 100%;
+}
+
+/* ✅ Responsive adjustments */
+@media (max-width: 1200px) {
+  .billing-buttons {
+    grid-template-columns: repeat(6, 1fr); /* 6 per row */
+    grid-template-rows: repeat(auto-fit, minmax(60px, 1fr));
+    height: auto;
+  }
+}
+
+@media (max-width: 800px) {
+  .billing-buttons {
+    grid-template-columns: repeat(4, 1fr); /* 4 per row */
+    gap: 6px;
+  }
+  .billing-buttons button {
+    font-size: 12px;
+    padding: 5px;
+  }
+}
+
+@media (max-width: 500px) {
+  .billing-buttons {
+    grid-template-columns: repeat(2, 1fr); /* 2 per row for mobile */
+    gap: 6px;
+  }
+  .billing-buttons button {
+    font-size: 11px;
+    padding: 4px;
+  }
+}
