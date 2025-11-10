@@ -8,6 +8,8 @@ export const fetchItems = createAsyncThunk("inventory/fetchItems", async () => {
   return res.data;
 });
 
+
+
 const inventorySlice = createSlice({
   name: "inventory",
   initialState: { items: [], loading: false, error: null },

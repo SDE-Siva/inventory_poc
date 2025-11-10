@@ -1,27 +1,34 @@
 import "../../App.css";
 import { Link } from "react-router-dom";
-import { itemsData } from "../../utilities/itemsData";
 import { homeIcon } from "../../assets/images";
-import { useState, useEffect } from "react";
-import { useSelector ,useDispatch} from "react-redux";
+import { useState, useEffect, use } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { fetchItems } from "../../slice/inventorySlice";
+import { FaEdit, FaTrash } from "react-icons/fa";
+import { updateItem, deleteItem } from "../../api/inventoryService";
+import Snackbar from "../common/Snackbar";
 
 export const Inventory = () => {
-  const itemsData = useSelector((state) => state.inventory.items)
+  const itemsData = useSelector((state) => state.inventory.items);
   const dispatch = useDispatch();
   const [filterType, setFilterType] = useState("");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [inventoryItems, setInventoryItems] = useState(itemsData);
 
+  const [showEditPopup, setShowEditPopup] = useState(false);
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [editedItem, setEditedItem] = useState({ price: "", purchased: "" });
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState({message:"", type:""});
 
   useEffect(() => {
-    dispatch(fetchItems())
-    console.log("Fetched Items for Inventory");
-  },[])
+    dispatch(fetchItems());
+  }, []);
 
   useEffect(() => {
-  setInventoryItems(itemsData); 
+    setInventoryItems(itemsData);
   }, [itemsData]);
 
   useEffect(() => {
@@ -72,20 +79,63 @@ export const Inventory = () => {
         return;
     }
 
-    const result = itemsData.filter((item) => {
-      return item.purchaseDate >= from && item.purchaseDate <= to;
-    });
+    const result = itemsData.filter(
+      (item) => item.purchaseDate >= from && item.purchaseDate <= to
+    );
 
     setInventoryItems(result);
   }, [filterType, fromDate, toDate]);
 
-  const formatDate = (date) => {
-    return date.toISOString().split("T")[0];
+  const formatDate = (date) => date.toISOString().split("T")[0];
+
+  const handleEdit = (item) => {
+    setSelectedItem(item);
+    setEditedItem({ price: item.price, purchased: item.purchased });
+    setShowEditPopup(true);
+  };
+
+  const handleDelete = (id) => {
+    const item = inventoryItems.find((i) => i.id === id);
+    setSelectedItem(item);
+    setShowDeletePopup(true);
+  };
+
+  const handleEditSave = async() => {
+  try {
+    await updateItem(selectedItem.id, editedItem);
+    setShowEditPopup(false);
+    setShowSnackbar(true);
+    setSnackbarMessage({message:"Item updated successfully!", type:"success"});
+    setTimeout(() => setShowSnackbar(false), 2000);
+    dispatch(fetchItems()); 
+  } catch (error) {
+    etShowSnackbar(true);
+    setSnackbarMessage({message:"Item Update failed!", type:"error"});
+    setTimeout(() => setShowSnackbar(false), 2000);
+    console.error("Error saving item:", error);
+  }
+  };
+
+  const confirmDelete = async() => {
+  try {
+    await deleteItem(selectedItem.id);
+    setShowDeletePopup(false);
+    setShowSnackbar(true);
+    setSnackbarMessage({message:"Item deleted successfully!", type:"success"});
+    setTimeout(() => setShowSnackbar(false), 2000);
+    dispatch(fetchItems()); 
+  } catch (error) {
+    setShowSnackbar(true);
+    setSnackbarMessage({message:"Item Deletion failed!", type:"error"});
+    setTimeout(() => setShowSnackbar(false), 2000);
+    console.error("Error deleting item:", error);
+  }
   };
 
   return (
     <div>
       <div className="header">
+        {showSnackbar && <Snackbar message={snackbarMessage.message} type={snackbarMessage.type} />}
         <div className="home-icon">
           <Link to={"/"}>
             <img src={homeIcon} alt="Home" />
@@ -106,18 +156,13 @@ export const Inventory = () => {
           <option value="Last Month">Last Month</option>
           <option value="Custom">Custom</option>
         </select>
-        {filterType === "Custom" ? (
+        {filterType === "Custom" && (
           <>
             <label>From:</label>
-            <input
-              type={"date"}
-              onChange={(e) => setFromDate(e.target.value)}
-            />
+            <input type="date" onChange={(e) => setFromDate(e.target.value)} />
             <label>To:</label>
-            <input type={"date"} onChange={(e) => setToDate(e.target.value)} />
+            <input type="date" onChange={(e) => setToDate(e.target.value)} />
           </>
-        ) : (
-          ""
         )}
       </div>
 
@@ -131,6 +176,7 @@ export const Inventory = () => {
               <th>Purchased</th>
               <th>Sold</th>
               <th>In Stock</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -143,18 +189,102 @@ export const Inventory = () => {
                   <td>{item.purchased}</td>
                   <td>{item.sold}</td>
                   <td>{item.inStock}</td>
+                  <td>
+                    <FaEdit
+                    className="bg-transparent"
+                      title="Edit"
+                      onClick={() => handleEdit(item)}
+                      style={{
+                        cursor: "pointer",
+                        marginRight: "30px",
+                      }}
+                    />
+                    <FaTrash
+                    className="bg-transparent"
+                      title="Delete"
+                      onClick={() => handleDelete(item.id)}
+                      style={{ cursor: "pointer", }}
+                    />
+                  </td>
                 </tr>
               ))
             ) : (
-              <tr className=" text-center">
-                <td colSpan={7} className=" text-center">
-                  No Matching Items Found
-                </td>
+              <tr className="text-center">
+                <td colSpan={7}>No Matching Items Found</td>
               </tr>
             )}
           </tbody>
         </table>
       </div>
+
+      {showEditPopup && selectedItem && (
+        <div className="popup-overlay ">
+          <div className="popup-box bg-white">
+            <h2 className="bg-transparent">Edit Item</h2>
+            <p className="bg-transparent">
+              Editing <strong className="bg-transparent">{selectedItem.itemName}</strong>
+            </p>
+
+            <div className="edit-popup-fields bg-transparent">
+              <label className="bg-transparent">
+                Price:
+                <input 
+                className="bg-transparent"
+                  type="number"
+                  value={editedItem.price}
+                  onChange={(e) =>
+                    setEditedItem({ ...editedItem, price: e.target.value })
+                  }
+                />
+              </label>
+
+              <label className="bg-transparent">
+                In Stock:
+                <input
+                className="bg-transparent"
+                  type="number"
+                  value={editedItem.inStock}
+                  onChange={(e) =>
+                    setEditedItem({
+                      ...editedItem,
+                      inStock: e.target.value,
+                    })
+                  }
+                />
+              </label>
+            </div>
+
+            <div className="popup-btn-group bg-transparent">
+              <button className="cancel-btn" onClick={() => setShowEditPopup(false)}>
+                Cancel
+              </button>
+              <button className="confirm-btn bg-transparent" onClick={handleEditSave}>
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showDeletePopup && selectedItem && (
+        <div className="popup-overlay">
+          <div className="popup-box bg-white">
+            <h2 className="bg-transparent">Confirm Delete</h2>
+            <p className="bg-transparent">
+              Are you sure you want to delete{" "}
+              <strong className="bg-transparent">{selectedItem.itemName}</strong>?
+            </p>
+            <div className="popup-btn-group bg-transparent">
+              <button className="cancel-btn " onClick={() => setShowDeletePopup(false)}>
+                Cancel
+              </button>
+              <button className="confirm-btn btn-danger" onClick={confirmDelete}>
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

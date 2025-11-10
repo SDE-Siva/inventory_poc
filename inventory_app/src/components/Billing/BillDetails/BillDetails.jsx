@@ -1,22 +1,15 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { itemsData } from "../../../utilities/itemsData";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import './BillDetails.css'
 import { useDispatch, useSelector } from "react-redux";
-import { addOrUpdateItemToBill, decreaseOrRemoveItemFromBill } from "../../../slice/billingItemSlice";
+import { addOrUpdateItemToBill, decreaseOrRemoveItemFromBill,} from "../../../slice/billingItemSlice";
 
 export const BillDetails = ({
-  addItem,
-  billMenu,
-  tenderAmount,
   newBill,
-  setBillMenu,
-  setAddItem,
-  setTenderAmount,
 }) => {
 
   const dispatch = useDispatch();
-  const { itemsForBill, totalBillAmount } = useSelector((state) => state.billingItem);
+  const { itemsForBill, totalBillAmount,  billingTable ,itemsTable, tenderAmount, gstAmount,changeAmount} = useSelector((state) => state.billingItem);
   const { items } = useSelector((state) => state.inventory);
   const [itemNumberInput, setItemNumberInput] = useState("");
   const [itemQuantityInput, setItemQuantityInput] = useState("");
@@ -24,25 +17,9 @@ export const BillDetails = ({
   const [totalGST, setTotalGST] = useState(0);
   const [activeInput, setActiveInput] = useState("");
 
-  useEffect(() => {
-    let payable = totalBillAmount + totalGST;
-    setChangeAfterTender(() =>
-      tenderAmount - payable > 0 ? (tenderAmount - payable).toFixed(2) : 0
-    );
-  }, [tenderAmount]);
 
-  useEffect(() => {
-    setTotalGST(totalBillAmount * 0.12 > 0 ? totalBillAmount * 0.12 : 0);
-  }, [totalBillAmount]);
 
-  useEffect(() => {
-    setBillMenu("billMenuBlocked");
-    setAddItem("addItem");
-    setChangeAfterTender(0);
-    setTenderAmount(0);
-  }, [newBill]);
-
-  // 🔹 Handle numeric keypad input
+  // Handle numeric keypad input
   const handleButtonClick = (value) => {
     if (!activeInput) return;
     if (activeInput === "itemNumber") {
@@ -52,7 +29,7 @@ export const BillDetails = ({
     }
   };
 
-  // 🔹 Handle Clear (delete last digit)
+  // Handle Clear (delete last digit)
   const handleClear = () => {
     if (activeInput === "itemNumber") {
       setItemNumberInput((prev) => prev.slice(0, -1));
@@ -68,43 +45,43 @@ export const BillDetails = ({
 
 
   const handleAddItem = () => {
-  console.log("Adding item:", itemNumberInput, "Quantity:", itemQuantityInput);
+    console.log("Adding item:", itemNumberInput, "Quantity:", itemQuantityInput);
 
-  const trimmedNum = itemNumberInput.trim();
-  const quantity = parseInt(itemQuantityInput) || 0;
+    const trimmedNum = itemNumberInput.trim();
+    const quantity = parseInt(itemQuantityInput) || 0;
 
-  if (!trimmedNum.startsWith("#")) {
-    alert("Item number must start with # (e.g., #0001)");
-    return;
-  }
+    if (!trimmedNum.startsWith("#")) {
+      alert("Item number must start with # (e.g., #0001)");
+      return;
+    }
 
-  if (quantity <= 0) {
-    alert("Enter valid quantity");
-    return;
-  }
+    if (quantity <= 0) {
+      alert("Enter valid quantity");
+      return;
+    }
 
-  const foundItem = items.find((i) => i.itemNumber === trimmedNum);
+    const foundItem = items.find((i) => i.itemNumber === trimmedNum);
 
-  if (!foundItem) {
-    alert(`Item not found for ${trimmedNum}`);
-    return;
-  }
+    if (!foundItem) {
+      alert(`Item not found for ${trimmedNum}`);
+      return;
+    }
 
-  if (foundItem.inStock <= 0) {
-    alert(`${foundItem.itemName} is out of stock`);
-    return;
-  }
+    if (foundItem.inStock <= 0) {
+      alert(`${foundItem.itemName} is out of stock`);
+      return;
+    }
 
-  if (quantity > foundItem.inStock) {
-    alert(`Only ${foundItem.inStock} in stock`);
-    return;
-  }
+    if (quantity > foundItem.inStock) {
+      alert(`Only ${foundItem.inStock} in stock`);
+      return;
+    }
 
-  const itemWithQuantity = { ...foundItem, quantity };
-  dispatch(addOrUpdateItemToBill(itemWithQuantity));
+    const itemWithQuantity = { ...foundItem, quantity };
+    dispatch(addOrUpdateItemToBill(itemWithQuantity));
 
-  handleAC();
- };
+    handleAC();
+  };
 
   const handleRemoveItem = () => {
   if (!itemNumberInput) {
@@ -134,12 +111,12 @@ export const BillDetails = ({
       <div className="main-content-container">
         <div className="Top-section">
           <div className="total-price">
-            {addItem === "addItem"
+            {itemsTable != "addItemBlocked"
               ? `Total price: $${totalBillAmount.toFixed(2)}`
-              : `Change: $${changeAfterTender}`}
+              : `Change: $${changeAmount.toFixed(2)}`}
           </div>
           <div className="left-table-container">
-            <table className={`price-table table table-borderless ${addItem}`}>
+            <table className={`price-table table table-borderless ${itemsTable}`}>
               <thead className="bg-transparent" style={{ position: "sticky" }}>
                 <tr>
                   <th>No</th>
@@ -163,19 +140,17 @@ export const BillDetails = ({
                 ))}
               </tbody>
             </table>
-            <div className={`bill-container ${billMenu}`}>
+            <div className={`bill-container ${billingTable}`}>
               <div className="bill-rows">
                 <div className="text">Amount</div>
                 <div>
                   $
-                  {totalBillAmount >= 0
-                    ? totalBillAmount.toFixed(2)
-                    : changeAfterTender}
+                  {totalBillAmount.toFixed(2)} 
                 </div>
               </div>
               <div className="bill-rows">
                 <div className="text">GST Amount</div>
-                <div>${totalGST.toFixed(2)}</div>
+                <div>${gstAmount.toFixed(2)}</div>
               </div>
               <div className="line"></div>
               <div className="bill-rows payable">
@@ -185,7 +160,7 @@ export const BillDetails = ({
                 <div>
                   $
                   {totalBillAmount >= 0
-                    ? (totalGST + totalBillAmount).toFixed(2)
+                    ? (gstAmount + totalBillAmount).toFixed(2) 
                     : 0}
                 </div>
               </div>
@@ -193,11 +168,11 @@ export const BillDetails = ({
 
               <div className="bill-rows blue">
                 <div className="text">Tender</div>
-                <div>${tenderAmount}</div>
+                <div>${tenderAmount.toFixed(2)}</div>
               </div>
               <div className="bill-rows blue">
                 <div className="text">Change</div>
-                <div>${changeAfterTender}</div>
+                <div>${changeAmount.toFixed(2)}</div>
               </div>
             </div>
           </div>
@@ -236,14 +211,14 @@ export const BillDetails = ({
               <button
                 className="btn btn-primary flex-fill"
                 style={{ height: "37px", border: "1px solid black" }}
-                onClick={handleAddItem}
+                onClick={itemsTable == "addItemOpened" ? handleAddItem: null}
               >
                 Add
               </button>
               <button
                 className="btn btn-danger flex-fill"
                 style={{ height: "37px", border: "1px solid black" }}
-                onClick={handleRemoveItem}
+                onClick={itemsTable == "addItemOpened" ? handleRemoveItem: null}
               >
                 Remove
               </button>

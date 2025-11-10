@@ -8,6 +8,7 @@ import { decreaseStock } from "../../../slice/inventorySlice";
 export const ItemScrollBar = ({  }) => {
   const dispatch = useDispatch();
   const itemData = useSelector((state) => state.inventory.items);
+  const itemsTableOpened = useSelector((state) => state.billingItem.itemsTable);
   const scrollRef = useRef(null);
 
   const scrollUp = () => {
@@ -39,7 +40,7 @@ export const ItemScrollBar = ({  }) => {
           <div
             className="item-box"
             key={index}
-            onClick={() => item.inStock > 0 && handleItemClick(item)}
+            onClick={() => {itemsTableOpened == "addItemOpened" ? item.inStock > 0 && handleItemClick(item): null}}
             
           >
             {item.itemName}

@@ -2,18 +2,58 @@ import "../../App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../RequestItems/RequestItems.css";
 import { Link } from "react-router-dom";
-import { requestedItemsData } from "../../utilities/itemsData";
 import { homeIcon } from "../../assets/images";
 import { useState } from "react";
+import axios from "axios";
+
+const API_URL = "http://localhost:5001/requestedItems";
 
 export const RequestItems = () => {
-  const [requestedItems, setRequestedItems] = useState(requestedItemsData);
+  const [requestedItems, setRequestedItems] = useState([]);
   const [requestedItemName, setRequestedItemName] = useState("");
-  const [requestedQuantity, setRequestedQuantity] = useState(0);
-  const [expectedDate, setExpectedDate] = useState();
+  const [requestedQuantity, setRequestedQuantity] = useState("");
+  const [expectedDate, setExpectedDate] = useState("");
+
+  const handleAddItem = (e) => {
+    e.preventDefault();
+
+    if (!requestedItemName || !requestedQuantity || !expectedDate) return;
+
+    const newItem = {
+      id: Date.now().toString(),
+      itemName: requestedItemName,
+      quantity: parseInt(requestedQuantity),
+      expectedDate,
+    };
+
+    setRequestedItems((prev) => [...prev, newItem]);
+    setRequestedItemName("");
+    setRequestedQuantity("");
+    setExpectedDate("");
+  };
+
+  const requestSubmission = async () => {
+    try {
+      if (requestedItems.length === 0) {
+        alert("No items to submit!");
+        return;
+      }
+
+      const requests = requestedItems.map((item) =>
+        axios.post(API_URL, item)
+      );
+
+      await Promise.all(requests);
+
+      alert("✅ Items submitted successfully!");
+      setRequestedItems([]);
+    } catch (error) {
+      console.error("❌ Error submitting requested items:", error);
+      alert("Error submitting requested items.");
+    }
+  };
 
   const resetRequests = () => setRequestedItems([]);
-  const requestSubmission = () => setRequestedItems([]);
 
   return (
     <div className="req-container">
@@ -39,7 +79,7 @@ export const RequestItems = () => {
           <tbody>
             {requestedItems.length > 0 ? (
               requestedItems.map((item, index) => (
-                <tr key={index}>
+                <tr key={item.id}>
                   <td>{index + 1}</td>
                   <td>{item.itemName}</td>
                   <td>{item.quantity}</td>
@@ -47,8 +87,8 @@ export const RequestItems = () => {
                 </tr>
               ))
             ) : (
-              <tr className=" text-center">
-                <td colSpan={7} className=" text-center">
+              <tr className="text-center">
+                <td colSpan={7} className="text-center">
                   No Item Request
                 </td>
               </tr>
@@ -56,27 +96,19 @@ export const RequestItems = () => {
           </tbody>
         </table>
       </div>
+
       <div className="bottom-container">
         <div className="action-buttons">
-          <button
-            className="btn btn-lg btn-primary "
-            onClick={() => resetRequests()}
-          >
+          <button className="btn btn-lg btn-primary" onClick={resetRequests}>
             Reset
           </button>
-          <button
-            className="btn btn-lg btn-primary"
-            onClick={() => requestSubmission()}
-          >
+          <button className="btn btn-lg btn-primary" onClick={requestSubmission}>
             Submit
           </button>
         </div>
+
         <div className="add-item">
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-            }}
-          >
+          <form onSubmit={handleAddItem}>
             <label htmlFor="itemName">Item Name:</label>
             <input
               type="text"

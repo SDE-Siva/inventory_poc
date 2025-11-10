@@ -1,12 +1,11 @@
 import "./BillingButtons.css";
 import { arrowIcon } from "../../../assets/images";
 import { useDispatch, useSelector } from "react-redux";
-import { updateBillingMenu, updateItemsMenu, addTenderAmount,removeLastItemFromBill,resetItemsForBill} from "../../../slice/billingItemSlice";
+import { updateBillingMenu, updateItemsMenu, addTenderAmount,removeLastItemFromBill} from "../../../slice/billingItemSlice";
 import { reduceStockAfterBilling } from "../../../api/inventoryService";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchItems } from "../../../slice/inventorySlice";
-import Snackbar from "../../common/Snackbar";
 const BillingButtons = ({
 }) => {
   
@@ -15,7 +14,6 @@ const BillingButtons = ({
   const inventoryItems = useSelector((state) => state.inventory.items)
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState({message:"", type:""});
 
   const handleBillMenu = () => {
     setShowConfirmPopup(true); 
@@ -25,15 +23,14 @@ const BillingButtons = ({
     dispatch(updateItemsMenu("addItemOpened"));
     dispatch(updateBillingMenu("billMenuBlocked"));
   }
-
   const handleTenderAmount = (amount) => {
     dispatch(addTenderAmount(amount));
   }
   
   const removeLastAddedItem = () => dispatch(removeLastItemFromBill());
-
   const handleNewBill = async () => {
-    dispatch(resetItemsForBill())
+    console.log(inventoryItems)
+    await reduceStockAfterBilling(itemsForBill);
     dispatch(fetchItems());
     console.log(inventoryItems)
   }
@@ -41,8 +38,7 @@ const BillingButtons = ({
   const confirmBill = async () => {
     dispatch(updateBillingMenu("billMenuOpened"));
     dispatch(updateItemsMenu("addItemBlocked"));
-    await reduceStockAfterBilling(itemsForBill);
-    setSnackbarMessage({message:"Bill Confirmed Successfully!", type:"success"});
+
     setShowConfirmPopup(false);
     setShowSnackbar(true);
     setTimeout(() => setShowSnackbar(false), 2000);
@@ -52,16 +48,10 @@ const BillingButtons = ({
     setShowConfirmPopup(false);
   };
 
-  const emptyBillAlert = () => {
-    setSnackbarMessage({message:"Bill is empty! please add some Items!", type:"error"});
-    setShowSnackbar(true);
-    setTimeout(() => setShowSnackbar(false), 2000);
-  }
-
   return (
-    <div className="buttons-container">
+    <div className="billing-buttons">
       {showSnackbar && (
-        <Snackbar message={snackbarMessage.message} type={snackbarMessage.type} />
+        <div className="snackbar">Bill Confirmed Successfully</div>
       )}
       {showConfirmPopup && (
         <div className="popup-overlay">
@@ -80,65 +70,40 @@ const BillingButtons = ({
         </div>
       )}
 
-      <div className="buttons-group">
-        <button className="button" onClick={() => {
+      <button onClick={() => {
         handleNewBill()
         handleItemMenu()
-      }}>
-          New Bill
-        </button> 
-        <button className="button second">Price Amendment</button>
+      }}>New Bill</button>
+      <div className="buttons-group">
+        <button>Price Amendment</button>
+        <button className="green">Open Cash Box</button>
       </div>
-
-      <button className="button"  onClick={() => handleTenderAmount(2)}>
-        $2
-      </button>
-
-      <button className="button" onClick={() => handleTenderAmount(2)} >
-        $10
-      </button>
-      < button
-        className="button green"
-        onClick={handleItemMenu}
+      <div className="buttons-group">
+        <button className="green">Terminate Transaction</button>
+        <button className="green">Goods Return</button>
+      </div>
+      <div className="buttons-group">
+      <button className="green">Reserved Transaction</button>
+      <button className="green">Restore</button>
+      </div>
+      <button onClick={() =>  handleTenderAmount(2)}>$2</button>
+      <button onClick={() => handleTenderAmount(10)}>$10</button>
+      <button className="green">Print</button>
+      <button className="green" onClick={removeLastAddedItem}>Cancel Item</button>
+      <button className="green" onClick={handleItemMenu}>Add Item</button>
+      <button className="button"  onClick={handleBillMenu}
       >
-        Add item
-      </button>
-      <div className="buttons-group">
-        <button className="button green">Open Cash Box</button>
-        <button className="button second green">Terminate Transaction</button>
-      </div>
-
-      <div className="buttons-group">
-        <button className="button green">Goods Return</button>
-        <button className="button second green">Print</button>
-      </div>
-
-
-      <button className="button">
-        <span className="arrow-icon" onClick={itemsForBill .length > 0 ? handleBillMenu : emptyBillAlert}>
+        <span className="arrow-icon"onClick={handleBillMenu}  >
           <img src={arrowIcon} alt="" />
         </span>
         Bill
       </button>
+      <button onClick={() => handleTenderAmount(5)}>$5</button>
+      <button onClick={() => handleTenderAmount(50)}>$50</button>
 
-      <button className="button" onClick={() => handleTenderAmount(5)}>
-        $5
-      </button>
-
-      <button className="button"  onClick={() => handleTenderAmount(50)}>
-        $50
-      </button>
-      <button
-        className="button green" 
-        onClick={removeLastAddedItem}
-      >
-        Cancel item
-      </button>
-      <div className="buttons-group">
-        <button className="button green">Reserved Transaction</button>
-        <button className="button second green">Restore</button>
-      </div>
-        <button className="button green">Main Menu</button>
+      <Link to="/" className="links">
+        <button className="green">Main Menu</button>
+      </Link>
     </div>
   );
 };

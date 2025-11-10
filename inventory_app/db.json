@@ -1,18 +1,7 @@
 {
   "items": [
     {
-      "itemNumber":"#0001",
-      "itemName": "Coffee Black",
-      "chineseName": "咖啡黑",
-      "imageURL": "/src/assets/coffee-black.jpg",
-      "price": 13.5,
-      "purchased": 44,
-      "sold": 14,
-      "inStock": 30,
-      "purchaseDate": "2025-06-04",
-      "quantity": 0
-    },
-    {
+      "id": "2",
       "itemNumber": "#0002",
       "itemName": "Tea Black",
       "chineseName": "红茶",
@@ -20,11 +9,12 @@
       "price": 11.3,
       "purchased": 91,
       "sold": 27,
-      "inStock": 64,
+      "inStock": "255",
       "purchaseDate": "2025-06-03",
       "quantity": 0
     },
     {
+      "id": "3",
       "itemNumber": "#0003",
       "itemName": "Daisy Mum Tea",
       "chineseName": "菊花茶",
@@ -32,11 +22,12 @@
       "price": 4.5,
       "purchased": 27,
       "sold": 17,
-      "inStock": 10,
+      "inStock": 9,
       "purchaseDate": "2025-06-02",
       "quantity": 0
     },
     {
+      "id": "4",
       "itemNumber": "#0004",
       "itemName": "Coffee",
       "chineseName": "咖啡",
@@ -49,6 +40,7 @@
       "quantity": 0
     },
     {
+      "id": "5",
       "itemNumber": "#0005",
       "itemName": "Tea",
       "chineseName": "茶",
@@ -56,23 +48,12 @@
       "price": 14.5,
       "purchased": 67,
       "sold": 7,
-      "inStock": 60,
+      "inStock": 33,
       "purchaseDate": "2025-05-30",
       "quantity": 0
     },
     {
-      "itemNumber": "#0006",
-      "itemName": "Chinese Tea",
-      "chineseName": "中国茶",
-      "imageURL": "/src/assets/Chinese Tea.jpg",
-      "price": 12.5,
-      "purchased": 41,
-      "sold": 21,
-      "inStock": 20,
-      "purchaseDate": "2025-05-28",
-      "quantity": 0
-    },
-    {
+      "id": "7",
       "itemNumber": "#0007",
       "itemName": "Iced Coffee Black",
       "chineseName": "冰咖啡黑",
@@ -85,6 +66,7 @@
       "quantity": 0
     },
     {
+      "id": "8",
       "itemNumber": "#0008",
       "itemName": "Iced Tea Black",
       "chineseName": "冰红茶",
@@ -97,6 +79,7 @@
       "quantity": 0
     },
     {
+      "id": "9",
       "itemNumber": "#0009",
       "itemName": "Soya Milk",
       "chineseName": "豆奶",
@@ -104,11 +87,12 @@
       "price": 16.5,
       "purchased": 37,
       "sold": 27,
-      "inStock": 10,
+      "inStock": 0,
       "purchaseDate": "2025-05-24",
       "quantity": 0
     },
     {
+      "id": "10",
       "itemNumber": "#0010",
       "itemName": "Iced Coffee",
       "chineseName": "冰咖啡",
@@ -116,11 +100,12 @@
       "price": 13.5,
       "purchased": 37,
       "sold": 27,
-      "inStock": 10,
+      "inStock": 4,
       "purchaseDate": "2025-05-22",
       "quantity": 0
     },
     {
+      "id": "11",
       "itemNumber": "#0011",
       "itemName": "Iced Tea",
       "chineseName": "冰茶",
@@ -128,11 +113,12 @@
       "price": 11.7,
       "purchased": 47,
       "sold": 26,
-      "inStock": 0,
+      "inStock": "20",
       "purchaseDate": "2025-05-20",
       "quantity": 0
     },
     {
+      "id": "12",
       "itemNumber": "#0012",
       "itemName": "Grass Jelly",
       "chineseName": "仙草",
@@ -145,6 +131,7 @@
       "quantity": 0
     },
     {
+      "id": "13",
       "itemNumber": "#0013",
       "itemName": "Coffee C",
       "chineseName": "咖啡C",
@@ -152,23 +139,12 @@
       "price": 16.5,
       "purchased": 39,
       "sold": 27,
-      "inStock": 0,
+      "inStock": "5",
       "purchaseDate": "2025-05-15",
       "quantity": 0
     },
     {
-      "itemNumber": "#0014",
-      "itemName": "Tea C",
-      "chineseName": "茶C",
-      "imageURL": "/src/assets/Tea C.jpg",
-      "price": 4.7,
-      "purchased": 41,
-      "sold": 17,
-      "inStock": 24,
-      "purchaseDate": "2025-05-12",
-      "quantity": 0
-    },
-    {
+      "id": "15",
       "itemNumber": "#0015",
       "itemName": "Black & White",
       "chineseName": "黑白",
@@ -181,6 +157,7 @@
       "quantity": 0
     },
     {
+      "id": "16",
       "itemNumber": "#0016",
       "itemName": "Milo",
       "chineseName": "美禄",
@@ -188,11 +165,12 @@
       "price": 11.9,
       "purchased": 41,
       "sold": 17,
-      "inStock": 24,
+      "inStock": 18,
       "purchaseDate": "2025-05-08",
       "quantity": 0
     },
     {
+      "id": "17",
       "itemNumber": "#0017",
       "itemName": "Iced Milo",
       "chineseName": "冰美禄",
@@ -200,16 +178,17 @@
       "price": 23.1,
       "purchased": 41,
       "sold": 17,
-      "inStock": 24,
+      "inStock": 18,
       "purchaseDate": "2025-05-05",
       "quantity": 0
     },
     {
+      "id": "18",
       "itemNumber": "#0018",
       "itemName": "Streamed Bun",
       "chineseName": "包子",
       "imageURL": "/src/assets/Streamed Bun.jpg",
-      "price": 5.0,
+      "price": 5,
       "purchased": 20,
       "sold": 10,
       "inStock": 10,
@@ -217,11 +196,12 @@
       "quantity": 0
     },
     {
+      "id": "19",
       "itemNumber": "#0019",
       "itemName": "Steamed Timsum",
       "chineseName": "蒸点心",
       "imageURL": "/src/assets/Steamed Timsum.jpg",
-      "price": 6.0,
+      "price": 6,
       "purchased": 25,
       "sold": 12,
       "inStock": 13,
@@ -229,6 +209,7 @@
       "quantity": 0
     },
     {
+      "id": "20",
       "itemNumber": "#0020",
       "itemName": "Deep Fry Timsum",
       "chineseName": "炸点心",
@@ -241,11 +222,12 @@
       "quantity": 0
     },
     {
+      "id": "21",
       "itemNumber": "#0021",
       "itemName": "Bake",
       "chineseName": "烘焙",
       "imageURL": "/src/assets/Bake.jpg",
-      "price": 4.0,
+      "price": 4,
       "purchased": 22,
       "sold": 14,
       "inStock": 8,
@@ -253,6 +235,7 @@
       "quantity": 0
     },
     {
+      "id": "22",
       "itemNumber": "#0022",
       "itemName": "Noodle Dumplings",
       "chineseName": "面/饺子",
@@ -265,27 +248,16 @@
       "quantity": 0
     },
     {
+      "id": "23",
       "itemNumber": "#0023",
       "itemName": "Porridge",
       "chineseName": "粥",
       "imageURL": "/src/assets/Porridge.jpg",
-      "price": 7.0,
+      "price": 7,
       "purchased": 40,
       "sold": 25,
       "inStock": 15,
       "purchaseDate": "2025-05-31",
-      "quantity": 0
-    },
-    {
-      "itemNumber": "#0024",
-      "itemName": "Takeaway (Water)",
-      "chineseName": "外卖（水）",
-      "imageURL": "/src/assets/Takeaway (Water).jpg",
-      "price": 2.0,
-      "purchased": 100,
-      "sold": 80,
-      "inStock": 20,
-      "purchaseDate": "2025-05-29",
       "quantity": 0
     }
   ],
@@ -293,14 +265,28 @@
     {
       "itemName": "Coffee Black",
       "quantity": 50,
-      "expectedDate": "2025-06-04"
+      "expectedDate": "2025-06-04",
+      "id": "d85b"
+    },
+    {
+      "id": "1762102895318",
+      "itemName": "Coffee green",
+      "quantity": 10,
+      "expectedDate": "2025-11-03"
+    },
+    {
+      "id": "1762757150279",
+      "itemName": "Bread",
+      "quantity": 12,
+      "expectedDate": "2025-11-10"
     }
   ],
   "itemsMenu": [
     {
       "english_name": "Iced Milo",
       "chinese_name": "",
-      "imageURL": "/src/assets/icedmilo.jpg"
+      "imageURL": "/src/assets/icedmilo.jpg",
+      "id": "bc89"
     }
   ]
 }

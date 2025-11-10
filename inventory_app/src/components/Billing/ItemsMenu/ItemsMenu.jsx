@@ -9,6 +9,7 @@ import { addOrUpdateItemToBill } from "../../../slice/billingItemSlice";
 const ItemsMenu = () => {
   const dispatch = useDispatch();
   const dataOfItems = useSelector((state) => state.inventory.items);
+  const itemTableOpened = useSelector((state) => state.billingItem.itemsTable);
 
   useEffect(() => {
    dispatch(fetchItems());
@@ -31,7 +32,7 @@ const ItemsMenu = () => {
               <ItemTiles
                 item={item}
                 key={item.itemNumber}
-                onClick={() => item.inStock > 0 && handleItemClick(item)}
+                onClick={() => {itemTableOpened == "addItemOpened" ? item.inStock > 0 && handleItemClick(item): null}}
               />
             ))}
           </div>
